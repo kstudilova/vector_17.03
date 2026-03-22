@@ -11,8 +11,19 @@ namespace topit {
     public:
       Vector();
       ~Vector();
+      Vector(const Vector&);
+      Vector(Vector&&);
+      Vector& operator=(const Vector&);
+      Vector& operator=(Vector&&);
 
-      bool isEmpty() const noexcept;
+      bool isEmpty() const noexcept; //дз
+      bool getSize() const noexcept; //дз
+      bool getCapacity() const noexcept; //дз
+
+      void popBack(); //дз
+      void pushBack(const T& value); //дз
+      void insert(size_t i, const T& v);
+      void erase(size_t i);
 
     private:
       T* data;
@@ -35,6 +46,11 @@ topit::Vector< T >::~Vector() {
 template< class T >
 bool topit::Vector< T >::isEmpty() const noexcept {
   return !size_;
+}
+
+template< class T >
+void topit::Vector< T >::pushBack(const T& value) {
+
 }
 
 #endif
