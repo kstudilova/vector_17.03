@@ -12,6 +12,8 @@ namespace topit {
       Vector();
       ~Vector();
 
+      bool isEmpty() const noexcept;
+
     private:
       T* data;
       size_t size, cap;
@@ -28,6 +30,11 @@ topit::Vector< T >::Vector() :
 template< class T >
 topit::Vector< T >::~Vector() {
   delete[] data_;
+}
+
+template< class T >
+bool topit::Vector< T >::isEmpty() const noexcept {
+  return !size_;
 }
 
 #endif
