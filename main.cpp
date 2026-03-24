@@ -68,6 +68,29 @@ bool testManyPushBack() {
     return v.getSize() == 100 && v.getCapacity() >= 100;
 }
 
+bool testInboundElementAccess() {
+    topit::Vector< int > v;
+    v.pushBack(1);
+    try {
+        const int & val = v.at(0);
+        return val == 1;
+    } catch(...) {
+        return false;
+    }
+}
+
+bool testOutOfInboundElementAccess() {
+    topit::Vector< int > v;
+    try {
+        const int & val = v.at(0);
+        return false;
+    } catch (const std::out_of_range &) {
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
 int main() {
     using test_t = std::pair< const char *, bool(*)() >;
     test_t tests[] = {
@@ -78,7 +101,9 @@ int main() {
         { "Get capacity growth", testGetCapacity },
         { "PopBack on empty vector", testPopBackOnEmpty },
         { "Capacity after popBack", testCapacityAfterPopBack },
-        { "Many pushBack", testManyPushBack }
+        { "Many pushBack", testManyPushBack },
+        { "Inbound access", testInboundElementAccess},
+        { "Out of bound access", testOutOfInboundElementAccess}
     };
 
     const size_t count = sizeof(tests) / sizeof(test_t);

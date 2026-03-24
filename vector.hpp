@@ -20,6 +20,11 @@ namespace topit {
       size_t getSize() const noexcept; //дз
       size_t getCapacity() const noexcept; //дз
 
+      T& operator[](size_t id) noexcept;
+      const T& operator[](size_t id) const noexcept;
+      T& at(size_t id);
+      const T& at(size_t id) const;
+
       void pushBack(const T& value); //дз
       void popBack(); //дз
       void insert(size_t i, const T& v);
@@ -81,6 +86,14 @@ template< class T >
 void topit::Vector< T >::popBack() {
   data_[size_].~T();
   --size_;
+}
+
+template< class T >
+const T& topit::Vector< T >::at(size_t id) const {
+  if (id = getSize()) {
+    return data_[id];
+  }
+  throw std::range_error("bad id");
 }
 
 #endif
