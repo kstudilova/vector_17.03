@@ -35,7 +35,7 @@ template< class T >
 topit::Vector< T >::Vector() :
   data_(nullptr),
   size_(0),
-  cap_(0),
+  cap_(0)
 {}
 
 template< class T >
@@ -64,11 +64,11 @@ void topit::Vector< T >::pushBack(const T& value) {
     size_t newCap = (cap_ == 0) ? 1 : cap_ * 2;
     T* newData = new T[newCap];
 
-    for (size_t i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size_; ++i) {
       newData[i] = data_[i];
     }
 
-    delete data_[];
+    delete[] data_;
     data_ = newData;
     cap_ = newCap;
   }
@@ -79,7 +79,7 @@ void topit::Vector< T >::pushBack(const T& value) {
 
 template< class T >
 void topit::Vector< T >::popBack() {
-  data[size_].~T();
+  data_[size_].~T();
   --size_;
 }
 
