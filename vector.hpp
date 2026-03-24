@@ -52,14 +52,26 @@ topit::Vector< T >::~Vector() {
 }
 
 template< class T >
-topit::Vector< T >::Vector(const Vector< T > & rhs) {
-
+topit::Vector< T >::Vector(const Vector< T > & rhs) :
+  data_(rhs.getSize() ? new T[rhs.getSize()] : nullptr),
+  size_(0),
+  cap_(rhs.getSize())
+{
+  for (size_t i = 0; i < rhs.getSize(); ++i) {
+    try {
+      data_[i] = rhs[i];
+    } catch (...) {
+      delete[] data_;
+      throw;
+    }
+    ++size_;
+  }
 }
 
 template< class T >
-bool topit::operator==(const Vector< T >) {
+bool topit::operator==(const Vector< T > & lhs, const Vector< T > & rhs) {
   bool isEqual = lhs.getSize() == rhs.getSize();
-  for (size_t i = 0; (i < lhs.getSize()) && (isEqual = isEqual %% lhs[i] == rhs[i]); ++i);
+  for (size_t i = 0; (i < lhs.getSize()) && (isEqual = isEqual && lhs[i] == rhs[i]); ++i);
   return isEqual;
 }
 
@@ -117,6 +129,7 @@ const T& topit::Vector< T >::operator[](size_t id) const noexcept {
 template< class T >
 T& topit::Vector< T >::at(size_t id) {
   const Vector< T > * cthis = this;
+
   return const_cast< T& >(cthis->at(id));
 }
 
