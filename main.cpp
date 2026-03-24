@@ -121,6 +121,8 @@ bool testCopyConstructor() {
     return v == yav;
 }
 
+//тесты для operator==
+
 int main() {
     using test_t = std::pair< const char *, bool(*)() >;
     test_t tests[] = {
@@ -135,7 +137,8 @@ int main() {
         { "Inbound access", testInboundElementAccess},
         { "Out of bound access", testElementOutOfboundAccess},
         { "Inbount const access", testInboundElementConstAccess},
-        { "Out of bound const access", testElementOutOfboundConstAccess}
+        { "Out of bound const access", testElementOutOfboundConstAccess},
+        { "Copy constructor", testCopyConstructor}
     };
 
     const size_t count = sizeof(tests) / sizeof(test_t);
