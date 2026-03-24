@@ -3,6 +3,7 @@
 #include "vector.hpp"
 
 bool testEmptyVector() {
+    std::cout << "__func__" << "\n";
     topit::Vector< int > v;
     return v.isEmpty();
 }
@@ -92,5 +93,7 @@ int main() {
     }
 
     std::cout << "RESULT: " << pass << "\n";
+    //Подсчёт пройденных/не пройденных тестов
+    //Выводить только не прошедшие тесты
     return 0;
 }
