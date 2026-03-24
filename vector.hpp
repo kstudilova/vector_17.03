@@ -34,6 +34,9 @@ namespace topit {
       T* data_;
       size_t size_, cap_;
   };
+
+  template< class T >
+  bool operator==( const Vector< T >& lhs, const Vector< T > & rhs);
 }
 
 template< class T >
@@ -46,6 +49,16 @@ topit::Vector< T >::Vector() :
 template< class T >
 topit::Vector< T >::~Vector() {
   delete[] data_;
+}
+
+template< class T >
+topit::Vector< T >::Vector(const Vector< T > & rhs) {
+
+}
+
+template< class T >
+bool topit::operator==(const Vector< T >) {
+
 }
 
 template< class T >
