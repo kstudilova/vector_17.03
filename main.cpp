@@ -79,7 +79,7 @@ bool testInboundElementAccess() {
     }
 }
 
-bool testOutOfInboundElementAccess() {
+bool testElementOutOfboundAccess() {
     topit::Vector< int > v;
     try {
         const int & val = v.at(0);
@@ -103,7 +103,7 @@ int main() {
         { "Capacity after popBack", testCapacityAfterPopBack },
         { "Many pushBack", testManyPushBack },
         { "Inbound access", testInboundElementAccess},
-        { "Out of bound access", testOutOfInboundElementAccess}
+        { "Out of bound access", testElementOutOfboundAccess}
     };
 
     const size_t count = sizeof(tests) / sizeof(test_t);
