@@ -115,10 +115,10 @@ bool testElementOutOfboundConstAccess() {
     }
 }
 
-bool testCopyConstructor {
+bool testCopyConstructor() {
     topit::Vector< int > v;
     topit::Vector< int > yav = v;
-    return v = yav;
+    return v == yav;
 }
 
 int main() {
