@@ -178,6 +178,24 @@ bool testInsertRangeAtBeginning() {
     return (v.getSize() == 4) && (v[0] == 1) && (v[1] == 2) && (v[2] == 3) && (v[3] == 4);
 }
 
+bool testEraseRangeFromMiddle() {
+    topit::Vector<int> v{1, 2, 3, 4, 5};
+    v.erase(1, 3);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 4) && (v[2] == 5);
+}
+
+bool testEraseFullRange() {
+    topit::Vector<int> v{1, 2, 3};
+    v.erase(0, 3);
+    return v.isEmpty();
+}
+
+bool testEraseEmptyRange() {
+    topit::Vector<int> v{1, 2, 3};
+    v.erase(1, 1);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 2) && (v[2] == 3);
+}
+
 bool testInitializerList() {
     topit::Vector< int > v {1, 2};
     return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
@@ -209,6 +227,9 @@ int main() {
         {"Insert range from another vector", testInsertRangeFromAnotherVector},
         {"Insert empty range", testInsertEmptyRange},
         {"Insert range at beginning", testInsertRangeAtBeginning},
+        {"Erase range from middle", testEraseRangeFromMiddle},
+        {"Erase full range", testEraseFullRange},
+        {"Erase empty range", testEraseEmptyRange},
         { "Non-empty vector for non-empty initializer list", testInitializerList }
     };
 
