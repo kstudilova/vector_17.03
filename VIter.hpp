@@ -45,4 +45,113 @@ namespace topit {
   };
 }
 
+template< class T >
+topit::VectorIterator< T >::VectorIterator(T* ptr) noexcept:
+  ptr_(ptr)
+{}
+
+template< class T >
+template< class U >
+topit::VectorIterator< T >::VectorIterator(const VectorIterator< U >& other) noexcept:
+  ptr_(other.ptr_)
+{}
+
+template< class T >
+T& topit::VectorIterator< T >::operator*() const noexcept {
+  return *ptr_;
+}
+
+template< class T >
+T* topit::VectorIterator< T >::operator->() const noexcept {
+  return ptr_;
+}
+
+template< class T >
+T& topit::VectorIterator< T >::operator[](std::ptrdiff_t i) const noexcept {
+  return (ptr_[i]);
+}
+
+template< class T >
+topit::VectorIterator< T >& topit::VectorIterator< T >::operator++() noexcept {
+  ++ptr_;
+  return *this;
+}
+
+template< class T >
+topit::VectorIterator< T > topit::VectorIterator< T >::operator++(int) noexcept {
+  VectorIterator< T > tmp = *this;
+  ++ptr_;
+  return tmp;
+}
+
+template< class T >
+topit::VectorIterator< T >& topit::VectorIterator< T >::operator--() noexcept {
+  --ptr_;
+  return *this;
+}
+
+template< class T >
+topit::VectorIterator< T > topit::VectorIterator< T >::operator--(int) noexcept {
+  VectorIterator< T > tmp = *this;
+  --ptr_;
+  return tmp;
+}
+
+template < class T >
+topit::VectorIterator< T >& topit::VectorIterator< T >::operator+=(std::ptrdiff_t n) noexcept {
+  ptr_ += n;
+  return *this;
+}
+
+template< class T >
+topit::VectorIterator< T >& topit::VectorIterator< T >::operator-=(std::ptrdiff_t n) noexcept {
+  ptr_ -= n;
+  return *this;
+}
+
+template< class T >
+topit::VectorIterator< T > topit::VectorIterator< T >::operator+(std::ptrdiff_t n) const noexcept {
+  return VectorIterator(ptr_ + n);
+}
+
+template< class T >
+topit::VectorIterator< T > topit::VectorIterator< T >::operator-(std::ptrdiff_t n) const noexcept {
+  return VectorIterator(ptr_ - n);
+}
+
+template< class T >
+std::ptrdiff_t topit::VectorIterator< T >::operator-(const VectorIterator< T >& other) const noexcept {
+  return ptr_ - other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator==(const VectorIterator& other) const noexcept {
+  return ptr_ == other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator!=(const VectorIterator& other) const noexcept {
+  return ptr_ != other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator<(const VectorIterator& other) const noexcept {
+  return ptr_ < other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator>(const VectorIterator& other) const noexcept {
+  return ptr_ > other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator<=(const VectorIterator& other) const noexcept {
+  return ptr_ <= other.ptr_;
+}
+
+template< class T >
+bool topit::VectorIterator< T >::operator>=(const VectorIterator& other) const noexcept {
+  return ptr_ >= other.ptr_;
+}
+
 #endif
