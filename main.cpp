@@ -241,8 +241,6 @@ bool testInitializerList() {
     return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
 }
 
-//тесты для operator==
-
 int main() {
     using test_t = std::pair< const char *, bool(*)() >;
     test_t tests[] = {
@@ -281,16 +279,24 @@ int main() {
     const size_t count = sizeof(tests) / sizeof(test_t);
 
     std::cout << std::boolalpha;
-    bool pass = true;
+    size_t passed = 0;
+    size_t failed = 0;
 
     for (size_t i = 0; i < count; ++i) {
         bool res = tests[i].second();
-        std::cout << tests[i].first << ": " << res << "\n";
-        pass = pass & res;
+        if (res) {
+            ++passed;
+        } else {
+            std::cout << "FAILED: " << tests[i].first << "\n";
+            ++failed;
+        }
     }
 
-    std::cout << "RESULT: " << pass << "\n";
+    std::cout << "Total: " << count << "\n";
+    std::cout << "Passed:  " << passed << "\n";
+    std::cout << "Failed:  " << failed << "\n";
+    std::cout << "RESULT: " << (failed == 0) << "\n";
     //Подсчёт пройденных/не пройденных тестов
     //Выводить только не прошедшие тесты
-    return 0;
+    return (failed == 0) ? 0 : 1;
 }
