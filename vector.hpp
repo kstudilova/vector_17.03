@@ -69,6 +69,8 @@ namespace topit {
     private:
       T* data_;
       size_t size_, cap_;
+      void grow(size_t new_cap);
+      void destroyAll() noexcept;
       explicit Vector(size_t size);
 
       void unsafePushBack(const T& value); //КР 30.03
@@ -97,7 +99,18 @@ topit::Vector< T >::Vector(size_t size):
 
 template< class T >
 topit::Vector< T >::~Vector() {
-  delete[] data_;
+  destroyAll();
+  operator delete(data_);
+}
+
+template< class T >
+void topit::Vector< T >::destroyAll() noexcept
+{
+  for (size_t i = 0; i < size_; ++i)
+  {
+    data_[i].~T();
+  }
+  size_ = 0;
 }
 
 template< class T >
@@ -247,6 +260,66 @@ const T& topit::Vector< T >::at(size_t id) const {
     return (*this)[id];
   }
   throw std::out_of_range("bad id");
+}
+
+template < class T >
+void topit::Vector< T >::grow(size_t new_cap)
+{
+  T* new_data = static_cast< T* >(operator new(sizeof(T) * new_cap));
+  size_t constructed = 0;
+  try
+  {
+    for (size_t i = 0; i < size_; ++i)
+    {
+      new (&new_data[i]) T(std::move(data_[i]));
+      ++constructed;
+    }
+
+    for (size_t i = 0; i < size_; ++i)
+    {
+      data_[i].~T();
+    }
+
+    operator delete(data_);
+    data_ = new_data;
+    cap_ = new_cap;
+  }
+  catch(...)
+  {
+    for (size_t i = 0; i < constructed; ++i)
+    {
+      new_data[i].~T();
+    }
+    operator delete(new_data);
+    throw;
+  }
+}
+
+template< class T >
+void topit::Vector< T >::insert(size_t i, const T& v) {
+  if (i > size_)
+  {
+    throw std::out_of_range("Index is out of range");
+  }
+
+  Vector< T > temp = *this;
+
+  if (temp.size_ == temp.cap_)
+  {
+    size_t new_cap = (temp.cap_ == 0) ? 1 : temp.cap_ * 2;
+    temp.grow(new_cap);
+  }
+
+  for (size_t j = temp.size_; j > i; --j)
+  {
+    new (&temp.data_[j]) T(std::move(temp.data_[j - 1]));
+    temp.data_[j - 1].~T();
+  }
+
+  new (&temp.data_[i]) T(v);
+  ++temp.size_;
+
+  swap(temp);
 }
 
 #endif
