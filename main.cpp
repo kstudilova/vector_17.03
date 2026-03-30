@@ -147,6 +147,20 @@ bool testInsertSingleAtEnd()
     return (v.getSize() == 4) && (v[3] == 4);
 }
 
+bool testEraseFromMiddle()
+{
+    topit::Vector<int> v{1, 2, 3, 4};
+    v.erase(1);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 3) && (v[2] == 4);
+}
+
+bool testEraseLastElement()
+{
+    topit::Vector<int> v{1, 2, 3};
+    v.erase(2);
+    return (v.getSize() == 2) && (v[0] == 1) && (v[1] == 2);
+}
+
 bool testInitializerList() {
     topit::Vector< int > v {1, 2};
     return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
@@ -173,6 +187,8 @@ int main() {
         { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty},
         {"Insert single element at beginning", testInsertSingleAtBeginning},
         {"Insert single element at end", testInsertSingleAtEnd},
+        {"Erase element from middle", testEraseFromMiddle},
+        {"Erase last element", testEraseLastElement},
         { "Non-empty vector for non-empty initializer list", testInitializerList }
     };
 
