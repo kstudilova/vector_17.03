@@ -133,32 +133,49 @@ bool testCopyConstructorForNonEmpty() {
     }
 }
 
-bool testInsertSingleAtBeginning()
-{
+bool testInsertSingleAtBeginning() {
     topit::Vector<int> v{1, 2, 3};
     v.insert(0, 0);
     return (v.getSize() == 4) && (v[0] == 0) && (v[1] == 1) && (v[2] == 2) && (v[3] == 3);
 }
 
-bool testInsertSingleAtEnd()
-{
+bool testInsertSingleAtEnd() {
     topit::Vector<int> v{1, 2, 3};
     v.insert(3, 4);
     return (v.getSize() == 4) && (v[3] == 4);
 }
 
-bool testEraseFromMiddle()
-{
+bool testEraseFromMiddle() {
     topit::Vector<int> v{1, 2, 3, 4};
     v.erase(1);
     return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 3) && (v[2] == 4);
 }
 
-bool testEraseLastElement()
-{
+bool testEraseLastElement() {
     topit::Vector<int> v{1, 2, 3};
     v.erase(2);
     return (v.getSize() == 2) && (v[0] == 1) && (v[1] == 2);
+}
+
+bool testInsertRangeFromAnotherVector() {
+    topit::Vector<int> v{1, 2, 5};
+    topit::Vector<int> src{3, 4};
+    v.insert(2, src, 0, 2);
+    return (v.getSize() == 5) && (v[2] == 3) && (v[3] == 4) && (v[4] == 5);
+}
+
+bool testInsertEmptyRange() {
+    topit::Vector<int> v{1, 2, 3};
+    topit::Vector<int> src{10, 20};
+    v.insert(1, src, 1, 1);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 2) && (v[2] == 3);
+}
+
+bool testInsertRangeAtBeginning() {
+    topit::Vector<int> v{3, 4};
+    topit::Vector<int> src{1, 2};
+    v.insert(0, src, 0, 2);
+    return (v.getSize() == 4) && (v[0] == 1) && (v[1] == 2) && (v[2] == 3) && (v[3] == 4);
 }
 
 bool testInitializerList() {
@@ -189,6 +206,9 @@ int main() {
         {"Insert single element at end", testInsertSingleAtEnd},
         {"Erase element from middle", testEraseFromMiddle},
         {"Erase last element", testEraseLastElement},
+        {"Insert range from another vector", testInsertRangeFromAnotherVector},
+        {"Insert empty range", testInsertEmptyRange},
+        {"Insert range at beginning", testInsertRangeAtBeginning},
         { "Non-empty vector for non-empty initializer list", testInitializerList }
     };
 
