@@ -133,6 +133,20 @@ bool testCopyConstructorForNonEmpty() {
     }
 }
 
+bool testInsertSingleAtBeginning()
+{
+    topit::Vector<int> v{1, 2, 3};
+    v.insert(0, 0);
+    return (v.getSize() == 4) && (v[0] == 0) && (v[1] == 1) && (v[2] == 2) && (v[3] == 3);
+}
+
+bool testInsertSingleAtEnd()
+{
+    topit::Vector<int> v{1, 2, 3};
+    v.insert(3, 4);
+    return (v.getSize() == 4) && (v[3] == 4);
+}
+
 bool testInitializerList() {
     topit::Vector< int > v {1, 2};
     return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
@@ -157,6 +171,8 @@ int main() {
         { "Out of bound const access", testElementOutOfboundConstAccess},
         { "Copy constructor for empty vector", testCopyConstructorForEmpty},
         { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty},
+        {"Insert single element at beginning", testInsertSingleAtBeginning},
+        {"Insert single element at end", testInsertSingleAtEnd},
         { "Non-empty vector for non-empty initializer list", testInitializerList }
     };
 
