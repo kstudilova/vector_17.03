@@ -19,6 +19,8 @@
 #include <cassert>
 #include <stdexcept>
 
+#include "VIter.hpp"
+
 namespace topit {
 
   template< class T >
