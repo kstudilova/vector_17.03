@@ -87,8 +87,9 @@ topit::Vector< T >::Vector(std::initializer_list< T > il) :
 {
   size_t i = 0;
   for (auto it = il.begin(); it != il.end(); ++it) {
-    data_[i++] = *it;
+    new (&data_[i++]) T(*it);
   }
+  size_ = il.size();
 }
 
 template< class T >
@@ -151,6 +152,8 @@ topit::Vector< T >::Vector(Vector< T >&& rhs) noexcept :
   cap_(rhs.cap_)
 {
   rhs.data_ = nullptr;
+  rhs.size_ = 0;
+  rhs.cap_ = 0;
 }
 
 template< class T >
@@ -158,8 +161,9 @@ topit::Vector< T >::Vector(const Vector< T > & rhs) :
   Vector(rhs.getSize())
 {
   for (size_t i = 0; i < rhs.getSize(); ++i) {
-    data_[i] = rhs[i];
+    new (&data_[i]) T(rhs[i]); 
   }
+  size_ = rhs.getSize();
 }
 
 template< class T >
@@ -167,8 +171,9 @@ topit::Vector< T >::Vector(size_t size, const T& init) :
   Vector(size)
 {
   for (size_t i = 0; i < size; ++i) {
-    data_[i] = init;
+    new (&data_[i]) T(init);
   }
+  size_ = size;
 }
 
 template< class T >
