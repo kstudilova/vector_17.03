@@ -69,6 +69,23 @@ namespace topit {
       template< class VectorIterator, class FwdIterator >
       void insert(VectorIterator pos, FwdIterator start, FwdIterator end);
 
+      using It = VectorIterator< T >;
+      using CIt = VectorIterator< const T >;
+
+      It begin() noexcept;
+      It end() noexcept;
+      CIt begin() const noexcept;
+      CIt end() const noexcept;
+      CIt cbegin() const noexcept;
+      CIt cend() const noexcept;
+
+      iterator insert(CIt pos, const T& value);
+      template< class FwdIterator >
+      iterator insert(CIt pos, FwdIterator first, FwdIterator last);
+
+      iterator erase(CIt pos);
+      iterator erase(CIt first, CIt last);
+
     private:
       T* data_;
       size_t size_, cap_;
