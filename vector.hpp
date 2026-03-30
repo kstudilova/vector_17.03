@@ -263,31 +263,24 @@ const T& topit::Vector< T >::at(size_t id) const {
 }
 
 template < class T >
-void topit::Vector< T >::grow(size_t new_cap)
-{
+void topit::Vector< T >::grow(size_t new_cap) {
   T* new_data = static_cast< T* >(operator new(sizeof(T) * new_cap));
   size_t constructed = 0;
-  try
-  {
-    for (size_t i = 0; i < size_; ++i)
-    {
+  try {
+    for (size_t i = 0; i < size_; ++i) {
       new (&new_data[i]) T(std::move(data_[i]));
       ++constructed;
     }
 
-    for (size_t i = 0; i < size_; ++i)
-    {
+    for (size_t i = 0; i < size_; ++i) {
       data_[i].~T();
     }
 
     operator delete(data_);
     data_ = new_data;
     cap_ = new_cap;
-  }
-  catch(...)
-  {
-    for (size_t i = 0; i < constructed; ++i)
-    {
+  } catch(...) {
+    for (size_t i = 0; i < constructed; ++i) {
       new_data[i].~T();
     }
     operator delete(new_data);
@@ -297,21 +290,18 @@ void topit::Vector< T >::grow(size_t new_cap)
 
 template< class T >
 void topit::Vector< T >::insert(size_t i, const T& v) {
-  if (i > size_)
-  {
+  if (i > size_) {
     throw std::out_of_range("Index is out of range");
   }
 
   Vector< T > temp = *this;
 
-  if (temp.size_ == temp.cap_)
-  {
+  if (temp.size_ == temp.cap_) {
     size_t new_cap = (temp.cap_ == 0) ? 1 : temp.cap_ * 2;
     temp.grow(new_cap);
   }
 
-  for (size_t j = temp.size_; j > i; --j)
-  {
+  for (size_t j = temp.size_; j > i; --j) {
     new (&temp.data_[j]) T(std::move(temp.data_[j - 1]));
     temp.data_[j - 1].~T();
   }
@@ -323,26 +313,54 @@ void topit::Vector< T >::insert(size_t i, const T& v) {
 }
 
 template< class T >
-void topit::Vector< T >::erase(size_t i)
-{
-  if (i >= size_)
-  {
+void topit::Vector< T >::erase(size_t i) {
+  if (i >= size_) {
     throw std::out_of_range("Index is out of range");
   }
 
   Vector< T > temp(size_ - 1);
 
-  for (size_t j = 0; j < i; ++j)
-  {
+  for (size_t j = 0; j < i; ++j) {
     new (&temp.data_[j]) T(data_[j]);
   }
 
-  for (size_t j = i + 1; j < size_; ++j)
-  {
+  for (size_t j = i + 1; j < size_; ++j) {
     new (&temp.data_[j - 1]) T(data_[j]);
   }
 
   temp.size_ = size_ - 1;
+
+  swap(temp);
+}
+
+template< class T >
+void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t start, size_t end) {
+  if (i > size_ || start > end || end > rhs.size_) {
+    throw std::out_of_range("Too much");
+  }
+  
+  size_t count = end - start;
+  if (count == 0) {
+    return;
+  }
+
+  Vector< T > temp = *this;
+
+  if (temp.size_ + count > temp.cap_) {
+    size_t new_cap = (temp.cap_ == 0) ? count : std::max(temp.cap_ * 2, temp.size_ + count);
+    temp.grow(new_cap);
+  }
+
+  for (size_t j = temp.size_; j > i; --j) {
+    new (&temp.data_[j + count - 1]) T(std::move(temp.data_[j - 1]));
+    temp.data_[j - 1].~T();
+  }
+
+  for (size_t j = 0; j < count; ++j) {
+    new (&temp.data_[i + j]) T(rhs.data_[start + j]);
+  }
+  
+  temp.size_ += count;
 
   swap(temp);
 }
