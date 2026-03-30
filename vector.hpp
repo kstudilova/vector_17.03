@@ -114,6 +114,13 @@ void topit::Vector< T >::destroyAll() noexcept {
 }
 
 template< class T >
+topit::Vector< T >::Vector(size_t size):
+  data_(size ? static_cast< T* >(operator new(sizeof(T) * size)) : nullptr),
+  size_(0),
+  cap_(size)
+{}
+
+template< class T >
 void topit::Vector< T >::swap(Vector< T >& rhs) noexcept {
   std::swap(data_, rhs.data_);
   std::swap(size_, rhs.size_);
