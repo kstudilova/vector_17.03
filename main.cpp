@@ -128,9 +128,14 @@ bool testCopyConstructorForNonEmpty() {
     try {
         return yav.getSize() == v.getSize() && yav.at(0) == v.at(0);
     }
-    catch (...) {
+    catch (...) {  
         return false;
     }
+}
+
+bool testInitializerList() {
+    topit::Vector< int > v {1, 2};
+    return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
 }
 
 //тесты для operator==
@@ -151,7 +156,8 @@ int main() {
         { "Inbount const access", testInboundElementConstAccess},
         { "Out of bound const access", testElementOutOfboundConstAccess},
         { "Copy constructor for empty vector", testCopyConstructorForEmpty},
-        { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty}
+        { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty},
+        { "Non-empty vector for non-empty initializer list", testInitializerList }
     };
 
     const size_t count = sizeof(tests) / sizeof(test_t);
