@@ -17,6 +17,7 @@
 #include <cstddef>
 #include <memory>
 #include <cassert>
+#include <stdexcept>
 
 namespace topit {
 
@@ -91,10 +92,10 @@ topit::Vector< T >::Vector(std::initializer_list< T > il) :
 }
 
 template< class T >
-topit::Vector< T >::Vector(size_t size):
-  data_(size ? new T[size] : nullptr),
-  size_(size),
-  cap_(size)
+topit::Vector< T >::Vector():
+  data_(nullptr),
+  size_(0),
+  cap_(0)
 {}
 
 template< class T >
@@ -104,8 +105,7 @@ topit::Vector< T >::~Vector() {
 }
 
 template< class T >
-void topit::Vector< T >::destroyAll() noexcept
-{
+void topit::Vector< T >::destroyAll() noexcept {
   for (size_t i = 0; i < size_; ++i)
   {
     data_[i].~T();
@@ -190,18 +190,9 @@ template< class T >
 void topit::Vector< T >::pushBack(const T& value) {
   if (size_ == cap_) {
     size_t newCap = (cap_ == 0) ? 1 : cap_ * 2;
-    T* newData = new T[newCap];
-
-    for (size_t i = 0; i < size_; ++i) {
-      newData[i] = data_[i];
-    }
-
-    delete[] data_;
-    data_ = newData;
-    cap_ = newCap;
+    grow(newCap);
   }
-
-  data_[size_] = value;
+  new (&data_[size_]) T(value);  // placement new
   ++size_;
 }
 
@@ -231,8 +222,9 @@ void topit::Vector< T >::unsafePushBack(const T& val) {
 
 template< class T >
 void topit::Vector< T >::popBack() {
-  data_[size_].~T();
-  --size_;
+  if (size_ > 0) {
+    data_[--size_].~T();
+  }
 }
 
 template< class T >
