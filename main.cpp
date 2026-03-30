@@ -155,6 +155,24 @@ bool testMoveAssignment() {
     return (v2.getSize() == 3) && (v2[0] == 1) && (v2[1] == 2) && (v2[2] == 3);
 }
 
+bool testOperatorEqualSameVectors() {
+    topit::Vector<int> v1{1, 2, 3};
+    topit::Vector<int> v2{1, 2, 3};
+    return (v1 == v2);
+}
+
+bool testOperatorEqualDifferentVectors() {
+    topit::Vector<int> v1{1, 2, 3};
+    topit::Vector<int> v2{1, 2, 4};
+    return !(v1 == v2);
+}
+
+bool testOperatorEqualDifferentSizes() {
+    topit::Vector<int> v1{1, 2};
+    topit::Vector<int> v2{1, 2, 3};
+    return !(v1 == v2);
+}
+
 bool testInsertSingleAtBeginning() {
     topit::Vector<int> v{1, 2, 3};
     v.insert(0, 0);
@@ -244,6 +262,9 @@ int main() {
         { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty},
         {"Move constructor", testMoveConstructor},
         {"Move assignment", testMoveAssignment},   
+        {"Operator== same vectors", testOperatorEqualSameVectors},
+        {"Operator== different vectors", testOperatorEqualDifferentVectors},
+        {"Operator== different sizes", testOperatorEqualDifferentSizes},
         {"Insert single element at beginning", testInsertSingleAtBeginning},
         {"Insert single element at end", testInsertSingleAtEnd},
         {"Erase element from middle", testEraseFromMiddle},
