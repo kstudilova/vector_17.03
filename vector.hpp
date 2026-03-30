@@ -322,4 +322,29 @@ void topit::Vector< T >::insert(size_t i, const T& v) {
   swap(temp);
 }
 
+template< class T >
+void topit::Vector< T >::erase(size_t i)
+{
+  if (i >= size_)
+  {
+    throw std::out_of_range("Index is out of range");
+  }
+
+  Vector< T > temp(size_ - 1);
+
+  for (size_t j = 0; j < i; ++j)
+  {
+    new (&temp.data_[j]) T(data_[j]);
+  }
+
+  for (size_t j = i + 1; j < size_; ++j)
+  {
+    new (&temp.data_[j - 1]) T(data_[j]);
+  }
+
+  temp.size_ = size_ - 1;
+
+  swap(temp);
+}
+
 #endif
