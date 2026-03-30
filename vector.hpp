@@ -79,12 +79,12 @@ namespace topit {
       CIt cbegin() const noexcept;
       CIt cend() const noexcept;
 
-      iterator insert(CIt pos, const T& value);
+      It insert(CIt pos, const T& value);
       template< class FwdIterator >
-      iterator insert(CIt pos, FwdIterator first, FwdIterator last);
+      It insert(CIt pos, FwdIterator first, FwdIterator last);
 
-      iterator erase(CIt pos);
-      iterator erase(CIt first, CIt last);
+      It erase(CIt pos);
+      It erase(CIt first, CIt last);
 
     private:
       T* data_;
@@ -412,6 +412,16 @@ void topit::Vector< T >::erase(size_t start, size_t end) {
   temp.size_ = size_ - count;
 
   swap(temp);
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::begin() noexcept {
+  return iterator(data_);
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::end() noexcept {
+  return iterator(data_ + size_);
 }
 
 #endif
