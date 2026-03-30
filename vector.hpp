@@ -61,7 +61,7 @@ namespace topit {
       void erase(size_t i);
 
       void insert(size_t i, const Vector< T >& rhs, size_t start, size_t end);
-      void erase(size_t i, const Vector< T >& rhs, size_t start, size_t end);
+      void erase(size_t start, size_t end);
 
       template< class VectorIterator, class FwdIterator >
       void insert(VectorIterator pos, FwdIterator start, FwdIterator end);
@@ -361,6 +361,32 @@ void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t start, 
   }
   
   temp.size_ += count;
+
+  swap(temp);
+}
+
+template< class T >
+void topit::Vector< T >::erase(size_t start, size_t end) {
+  if (start > end || end > size_) {
+    throw std::out_of_range("Out of range");
+  }
+  
+  size_t count = end - start;
+  if (count == 0) {
+    return;
+  }
+
+  Vector< T > temp(size_ - count);
+
+  for (size_t j = 0; j < start; ++j) {
+    new (&temp.data_[j]) T(data_[j]);
+  }
+
+  for (size_t j = end; j < size_; ++j) {
+    new (&temp.data_[j - count]) T(data_[j]);
+  }
+  
+  temp.size_ = size_ - count;
 
   swap(temp);
 }
