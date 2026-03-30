@@ -133,6 +133,28 @@ bool testCopyConstructorForNonEmpty() {
     }
 }
 
+bool testMoveConstructor()
+{
+    topit::Vector<int> v;
+    v.pushBack(1);
+    v.pushBack(2);
+    v.pushBack(3);
+    
+    size_t old_size = v.getSize();
+    topit::Vector<int> moved(std::move(v));
+    
+    return (moved.getSize() == old_size) && (moved[0] == 1) && (moved[1] == 2) && (moved[2] == 3);
+}
+
+bool testMoveAssignment() {
+    topit::Vector<int> v1{1, 2, 3};
+    topit::Vector<int> v2{10, 20};
+    
+    v2 = std::move(v1);
+    
+    return (v2.getSize() == 3) && (v2[0] == 1) && (v2[1] == 2) && (v2[2] == 3);
+}
+
 bool testInsertSingleAtBeginning() {
     topit::Vector<int> v{1, 2, 3};
     v.insert(0, 0);
@@ -220,6 +242,8 @@ int main() {
         { "Out of bound const access", testElementOutOfboundConstAccess},
         { "Copy constructor for empty vector", testCopyConstructorForEmpty},
         { "Copy constructor for non empty vector", testCopyConstructorForNonEmpty},
+        {"Move constructor", testMoveConstructor},
+        {"Move assignment", testMoveAssignment},   
         {"Insert single element at beginning", testInsertSingleAtBeginning},
         {"Insert single element at end", testInsertSingleAtEnd},
         {"Erase element from middle", testEraseFromMiddle},
