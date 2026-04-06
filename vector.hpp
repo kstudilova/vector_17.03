@@ -84,9 +84,11 @@ namespace topit {
       It insert(CIt pos, FwdIterator first, FwdIterator last);
       It insert(CIt pos, std::initializer_list< T > init);
 
-
       It erase(CIt pos);
       It erase(CIt first, CIt last);
+
+      template< class P >
+      It remove_if(P p);
 
     private:
       T* data_;
@@ -493,6 +495,44 @@ typename topit::Vector< T >::It topit::Vector< T >::insert(CIt pos, FwdIterator 
 template< class T >
 typename topit::Vector< T >::It topit::Vector< T >::insert(CIt pos, std::initializer_list< T > init) {
   return insert(pos, init.begin(), init.end());
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::erase(CIt pos) {
+  size_t index = pos - begin();
+  erase(index);
+  return begin() + index;
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::erase(CIt first, CIt last) {
+  size_t start = first - begin();
+  size_t end = last - begin();
+  erase(start, end);
+  return begin() + start;
+}
+
+template< class T >
+template< class P >
+typename topit::Vector< T >::It topit::Vector< T >::remove_if(P p) {
+  size_t write = 0;
+
+  for (size_t read = 0; read < size_; ++read) {
+    if (!p(data_[read])) {
+      if (write != read) {
+        data_[write] = std::move(data_[read]);
+      }
+      ++write;
+    }
+  }
+
+  for (size_t i = write; i < size_; ++i) {
+    data_[i].~T();
+  }
+
+  size_ = write;
+
+  return begin() + write;
 }
 
 #endif
