@@ -278,9 +278,22 @@ void topit::Vector< T >::pushBackRange(IT b, size_t c) {
 
 template< class T >
 void topit::Vector< T >::pushBackCount(size_t k, const T& val) {
-  // Если памяти не хватает на k
-  // - делаем так, чтоб хватало на k*
-  // Добавляем в конец*
+  if (k == 0) {
+    return;
+  }
+
+  Vector< T > tmp = *this;
+
+  if (tmp.size_ == tmp.cap_) {
+    size_t new_cap = (cap_ == 0) ? 1 : std::max(tmp.size_ + k, tmp.cap_ * 2);
+  }
+
+  for (size_t i = 0; i < k; ++i) {
+    new (&tmp.data_[tmp.size_ + i]) T(val);
+  }
+
+  tmp.size_ += k;
+  swap(tmp);
 }
 
 template< class T >
