@@ -278,6 +278,30 @@ bool testInsertInitListAtEnd() {
     return (v.getSize() == 5) && (*it == 3) && (v[2] == 3) && (v[3] == 4) && (v[4] == 5);
 }
 
+bool testEraseIterMiddle() {
+    topit::Vector<int> v{1, 2, 3, 4};
+    auto it = v.erase(v.begin() + 1);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 3) && (*it == 3);
+}
+
+bool testEraseIterLast() {
+    topit::Vector<int> v{1, 2, 3};
+    auto it = v.erase(v.end() - 1);
+    return (v.getSize() == 2) && (v[0] == 1) && (v[1] == 2) && (it == v.end());
+}
+
+bool testEraseIterRange() {
+    topit::Vector<int> v{1, 2, 3, 4, 5};
+    auto it = v.erase(v.begin() + 1, v.begin() + 3);
+    return (v.getSize() == 3) && (v[0] == 1) && (v[1] == 4) && (*it == 4);
+}
+
+bool testEraseIterAll() {
+    topit::Vector<int> v{1, 2, 3};
+    auto it = v.erase(v.begin(), v.end()); 
+    return v.isEmpty() && (it == v.end());
+}
+
 int main() {
   using test_t = std::pair< const char *, bool(*)() >;
   test_t tests[] = {
@@ -317,6 +341,10 @@ int main() {
     {"Insert iterator empty range", testInsertIterEmptyRange},
     {"Insert initializer list at beginning", testInsertInitListAtBeginning},
     {"Insert initializer list at end", testInsertInitListAtEnd},
+    {"Erase iterator middle", testEraseIterMiddle},
+    {"Erase iterator last", testEraseIterLast},
+    {"Erase iterator range", testEraseIterRange},
+    {"Erase iterator all", testEraseIterAll},
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
