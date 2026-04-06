@@ -65,7 +65,7 @@ namespace topit {
 
       void insert(size_t i, const Vector< T >& rhs, size_t start, size_t end);
       void erase(size_t start, size_t end);
-      
+
       using It = VectorIterator< T >;
       using CIt = VectorIterator< const T >;
 
@@ -217,6 +217,18 @@ template< class T >
 size_t topit::Vector< T >::getCapacity() const noexcept {
   return cap_;
 }
+
+template< class T >
+void topit::Vector< T >::reserve(size_t k) {
+  if (k <= cap_) {
+    return;
+  }
+
+  Vector< T > tmp = *this;
+  tmp.grow(k);
+  swap(tmp);
+}
+
 
 template< class T >
 void topit::Vector< T >::pushBack(const T& value) {
