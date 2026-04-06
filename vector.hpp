@@ -583,7 +583,8 @@ typename topit::Vector< T >::It topit::Vector< T >::remove_if(P p) {
   for (size_t read = 0; read < size_; ++read) {
     if (!p(data_[read])) {
       if (write != read) {
-        data_[write] = std::move(data_[read]);
+        new (&data_[write]) T(std::move(data_[read]));
+        data_[read].~T();       
       }
       ++write;
     }
