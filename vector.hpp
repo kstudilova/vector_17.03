@@ -229,6 +229,34 @@ void topit::Vector< T >::reserve(size_t k) {
   swap(tmp);
 }
 
+template< class T >
+void topit::Vector< T >::shrinkToFit() {
+  if (size_ < cap_) {
+    T* new_data = static_cast< T* >(operator new(sizeof(T) * size_));
+    size_t done = 0;
+    try {
+      for (size_t i = 0; i < size_; ++i) {
+        new (&new_data[i]) T(std::move(data_[i]));
+        ++done;
+      }
+
+      for (size_t i = 0; i < size_; ++i) {
+        data_[i].~T();
+      }
+
+      operator delete(data_);
+      data_ = new_data;
+      cap_ = size_;
+    }
+    catch(...) {
+      for (size_t i = 0; i < done; ++i) {
+        new_data[i].~T();
+      }
+      operator delete(new_data);
+      throw;
+    }
+  }
+}
 
 template< class T >
 void topit::Vector< T >::pushBack(const T& value) {
