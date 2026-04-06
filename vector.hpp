@@ -416,12 +416,32 @@ void topit::Vector< T >::erase(size_t start, size_t end) {
 
 template< class T >
 typename topit::Vector< T >::It topit::Vector< T >::begin() noexcept {
-  return iterator(data_);
+  return It(data_);
 }
 
 template< class T >
 typename topit::Vector< T >::It topit::Vector< T >::end() noexcept {
-  return iterator(data_ + size_);
+  return It(data_ + size_);
+}
+
+template< class T >
+typename topit::Vector< T >::CIt topit::Vector< T >::begin() const noexcept {
+  return CIt(data_);
+}
+
+template< class T >
+typename topit::Vector< T >::CIt topit::Vector< T >::end() const noexcept {
+  return CIt(data_ + size_);
+}
+
+template< class T >
+typename topit::Vector< T >::CIt topit::Vector< T >::cbegin() const noexcept {
+  return CIt(data_);
+}
+
+template< class T >
+typename topit::Vector< T >::CIt topit::Vector< T >::cend() const noexcept {
+  return CIt(data_ + size_);
 }
 
 #endif
