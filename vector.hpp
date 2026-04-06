@@ -313,12 +313,10 @@ void topit::Vector< T >::pushBackCount(size_t k, const T& val) {
 
 template< class T >
 void topit::Vector< T >::unsafePushBack(const T& val) {
-  assert(size_ < cap_);
-  // Добавить в конец
+  assert(size_ < cap_);       
+  new (&data_[size_]) T(val);      
+  ++size_;                         
 }
-//pushBackCount
-//unsafePushBack
-
 
 template< class T >
 void topit::Vector< T >::popBack() {
