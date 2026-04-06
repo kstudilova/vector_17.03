@@ -133,8 +133,7 @@ bool testCopyConstructorForNonEmpty() {
   }
 }
 
-bool testMoveConstructor()
-{
+bool testMoveConstructor() {
   topit::Vector<int> v;
   v.pushBack(1);
   v.pushBack(2);
@@ -241,6 +240,44 @@ bool testInitializerList() {
   return v.getSize() == 2 && (v[0] == 1) && (v[1] == 2);
 }
 
+bool testInsertIterValueAtBeginning() {
+  topit::Vector<int> v{1, 2, 3};
+  auto it = v.insert(v.begin(), 0);
+  return (v.getSize() == 4) && (*it == 0) && (v[0] == 0) && (v[1] == 1);
+}
+
+bool testInsertIterValueAtEnd() {
+  topit::Vector<int> v{1, 2, 3};
+  auto it = v.insert(v.end(), 4);
+  return (v.getSize() == 4) && (*it == 4) && (v[3] == 4);
+}
+
+bool testInsertIterRangeFromVector() {
+  topit::Vector<int> v{1, 2, 5};
+  topit::Vector<int> src{3, 4};
+  auto it = v.insert(v.begin() + 2, src.begin(), src.end());
+  return (v.getSize() == 5) && (*it == 3) && (v[2] == 3) && (v[3] == 4) && (v[4] == 5);
+}
+
+bool testInsertIterEmptyRange() {
+    topit::Vector<int> v{1, 2, 3};
+    topit::Vector<int> src{10, 20};
+    auto it = v.insert(v.begin() + 1, src.begin(), src.begin());
+    return (v.getSize() == 3) && (it == v.begin() + 1);
+}
+
+bool testInsertInitListAtBeginning() {
+    topit::Vector<int> v{3, 4, 5};
+    auto it = v.insert(v.begin(), {1, 2});
+    return (v.getSize() == 5) && (*it == 1) && (v[0] == 1) && (v[1] == 2) && (v[2] == 3);
+}
+
+bool testInsertInitListAtEnd() {
+    topit::Vector<int> v{1, 2};
+    auto it = v.insert(v.end(), {3, 4, 5});
+    return (v.getSize() == 5) && (*it == 3) && (v[2] == 3) && (v[3] == 4) && (v[4] == 5);
+}
+
 int main() {
   using test_t = std::pair< const char *, bool(*)() >;
   test_t tests[] = {
@@ -273,7 +310,13 @@ int main() {
     {"Erase range from middle", testEraseRangeFromMiddle},
     {"Erase full range", testEraseFullRange},
     {"Erase empty range", testEraseEmptyRange},
-    { "Non-empty vector for non-empty initializer list", testInitializerList }
+    { "Non-empty vector for non-empty initializer list", testInitializerList },
+    {"Insert iterator value at beginning", testInsertIterValueAtBeginning},
+    {"Insert iterator value at end", testInsertIterValueAtEnd},
+    {"Insert iterator range from vector", testInsertIterRangeFromVector},
+    {"Insert iterator empty range", testInsertIterEmptyRange},
+    {"Insert initializer list at beginning", testInsertInitListAtBeginning},
+    {"Insert initializer list at end", testInsertInitListAtEnd},
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
