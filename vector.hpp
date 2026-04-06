@@ -271,9 +271,24 @@ void topit::Vector< T >::pushBack(const T& value) {
 template< class T >
 template< class IT >
 void topit::Vector< T >::pushBackRange(IT b, size_t c) { 
-  // Если памяти не хватает на с
-  // - делаем так, чтоб хватало на k*
-  // Добавляем в конец*
+  if (c == 0) {
+    return;
+  }
+
+  Vector< T > tmp = *this;
+
+  if (tmp.size_ + c > tmp.cap_) {
+    size_t new_cap = (tmp.cap_ == 0) ? c : std::max(tmp.size_ + c, tmp.cap_ * 2);
+    tmp.grow(new_cap);
+  }
+
+  for (size_t i = 0; i < c; ++i) {
+    new (&tmp.data_[tmp.size_ + i]) T(std::move(*b));
+    ++b;
+  }
+
+  tmp.size_ += c;
+  swap(tmp);
 }
 
 template< class T >
