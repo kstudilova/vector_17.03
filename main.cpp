@@ -302,6 +302,20 @@ bool testEraseIterAll() {
     return v.isEmpty() && (it == v.end());
 }
 
+bool testRemoveIfOdd() {
+  topit::Vector<int> v{1, 2, 3, 4, 5, 6};
+  v.remove_if([](int x) { return x % 2 != 0; });  // удаляем нечётные
+  topit::Vector<int> yav{2, 4, 6};
+  return v == yav;
+}
+
+bool testRemoveIfGreaterThanTen() {
+  topit::Vector<int> v{5, 15, 8, 20, 3, 12};
+  v.remove_if([](int x) { return x > 10; });  // удаляем > 10
+  topit::Vector<int> yav{5, 8, 3};
+  return v == yav;
+}
+
 int main() {
   using test_t = std::pair< const char *, bool(*)() >;
   test_t tests[] = {
@@ -345,6 +359,8 @@ int main() {
     {"Erase iterator last", testEraseIterLast},
     {"Erase iterator range", testEraseIterRange},
     {"Erase iterator all", testEraseIterAll},
+    {"RemoveIf odd numbers", testRemoveIfOdd},
+    {"RemoveIf greater than 10", testRemoveIfGreaterThanTen},
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
