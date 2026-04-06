@@ -82,6 +82,8 @@ namespace topit {
       It insert(CIt pos, const T& value);
       template< class FwdIterator >
       It insert(CIt pos, FwdIterator first, FwdIterator last);
+      It insert(CIt pos, std::initializer_list< T > init);
+
 
       It erase(CIt pos);
       It erase(CIt first, CIt last);
@@ -442,6 +444,55 @@ typename topit::Vector< T >::CIt topit::Vector< T >::cbegin() const noexcept {
 template< class T >
 typename topit::Vector< T >::CIt topit::Vector< T >::cend() const noexcept {
   return CIt(data_ + size_);
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::insert(CIt pos, const T& value) {
+  size_t index = pos - begin();
+  insert(index, value);
+  return begin() + index;
+}
+
+template< class T >
+template< class FwdIterator >
+typename topit::Vector< T >::It topit::Vector< T >::insert(CIt pos, FwdIterator first, FwdIterator last) {
+  size_t index = pos - begin();
+
+  size_t count = 0;
+  for (FwdIterator it = first; it != last; ++it) {
+    ++count;
+  }
+
+  if (count == 0) {
+    return begin() + index;
+  }
+
+  Vector< T > tmp = *this;
+
+  if (tmp.size_ == tmp.cap_) {
+    size_t new_cap = (tmp.cap_ == 0) ? 1 : std::max(tmp.cap_ * 2, tmp.size_ + count);
+    tmp.grow(new_cap);
+  }
+
+  for (size_t j = tmp.size_; j > index; ++j) {
+    new (&tmp.data_[j + count - 1]) T(std::move(tmp.data_[j - 1]));
+    tmp.data_[j - 1].~T();
+  }
+
+  for (size_t j = 0; j < count; ++j) {
+    new (&tmp.data_[index + j]) T(*first);
+    ++first;
+  }
+
+  tmp.size_ += count;
+  swap(tmp);
+
+  return begin() + index;
+}
+
+template< class T >
+typename topit::Vector< T >::It topit::Vector< T >::insert(CIt pos, std::initializer_list< T > init) {
+  return insert(pos, init.begin(), init.end());
 }
 
 #endif
