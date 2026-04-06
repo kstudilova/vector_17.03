@@ -65,10 +65,7 @@ namespace topit {
 
       void insert(size_t i, const Vector< T >& rhs, size_t start, size_t end);
       void erase(size_t start, size_t end);
-
-      template< class VectorIterator, class FwdIterator >
-      void insert(VectorIterator pos, FwdIterator start, FwdIterator end);
-
+      
       using It = VectorIterator< T >;
       using CIt = VectorIterator< const T >;
 
